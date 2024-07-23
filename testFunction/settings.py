@@ -33,8 +33,13 @@ LOGGERS = {
     'console_logger': console_logger
 }
 
+
+LOGGERS.get("console_logger").info(f"Reading file {CONFIG_FILE}")
 with open(CONFIG_FILE, 'r') as file:
     config = yaml.safe_load(file)
+LOGGERS.get("console_logger").info(f"File content: {config}")
+
+LOGGERS.get("console_logger").info(f"Populating databases internal variables")
 
 db_configs = config.get('databases', {})
 
@@ -49,8 +54,12 @@ for db_name, db_settings in db_configs.items():
         'HOST': db_settings.get('HOST', ''),
         'PORT': db_settings.get('PORT', ''),
         'DRIVER': db_settings.get('DRIVER', ''),
-        'TRUSTED_CONNECTION': db_settings.get('TRUSTED_CONNECTION', ''),
-        'OPTIONS': {
-            'TIMEOUT': db_settings.get('OPTIONS', {}).get('TIMEOUT', '')}
+        'TRUSTED_CONNECTION': db_settings.get('TRUSTED_CONNECTION', ''),  
     }
+
+    options = db_settings.get('OPTIONS', {})
+    if options:
+        DATABASES[db_name]['OPTIONS'] = options
+        
+LOGGERS.get("console_logger").info(f"DATABASES populated: {DATABASES}")
 

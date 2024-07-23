@@ -1,11 +1,8 @@
 from settings import DATABASES, LOGGERS
-from dotenv import load_dotenv
-import os
-from sqlalchemy import create_engine, MetaData
+from sqlalchemy import create_engine
 
 
 def init_connections():
-    load_dotenv()
 
     engines = []
     LOGGERS.get("console_logger").info("Preparing connection towards Databases")
@@ -47,8 +44,21 @@ def init_connections():
 
         connection_string = (f"mssql+pyodbc://"
                             f"{db['USER']}:{db['SECRET_KEY']}@{db['HOST']}/{db['NAME']}"
-                            f"?driver={db['DRIVER']}&TrustServerCertificate={db['TRUSTED_CONNECTION']}")
-    
+                            f"?driver={db['DRIVER']}"
+                            f"&TrustServerCertificate={db['TRUSTED_CONNECTION']}")
+        
+        optional_parameters = []
+        options = db.get('OPTIONS', {})
+        if options is not None:
+            LOGGERS.get("console_logger").info(f"Optional parameters are present, adding them to the connection string...")
+            for key, value in options.items():
+                LOGGERS.get("console_logger").info(f"Adding '{key}' parameter to the connection string")
+                optional_parameters.append(f"{key}={value}")
+
+        if optional_parameters:
+            connection_string += "&" + "&".join(optional_parameters)
+        
+        LOGGERS.get("console_logger").info(f"Connection string for '{each_db}' is ready: '{connection_string}'")
         new_engine = create_engine(connection_string)
 
         engines.append({"name": each_db, "engine": new_engine})
