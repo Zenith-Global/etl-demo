@@ -1,3 +1,4 @@
+from pathlib import Path
 from settings import DATABASES, LOGGERS, QUERIES_FOLDER, RESOURCES_FOLDER
 from sqlalchemy import create_engine
 from sqlalchemy.sql import text
@@ -57,12 +58,17 @@ class Database():
 
             self.engines.append({"name": each_db, "engine": new_engine})
 
-    def perform_query(self, db_name, query_name):
+    def perform_query(self, db_name, query_name, query_file_name=None):
         """Executes the query query_name in the db called db_name, then executes next_function"""
-
+    
         engine =  next((item["engine"] for item in self.engines if item['name'] == db_name), None)
-        
-        with open(QUERIES_FOLDER/f"{db_name}.yaml", 'r') as f:
+
+        if query_file_name is None:
+            query_file_path = QUERIES_FOLDER/f"{db_name}.yaml"
+        else:
+            query_file_path = Path(query_file_name)
+
+        with open(query_file_path, 'r') as f:
             queries = yaml.safe_load(f)
         
         query = queries[query_name].format(table_name="dizCodiceIVA")
