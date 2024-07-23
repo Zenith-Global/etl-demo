@@ -1,0 +1,3 @@
+example: |
+  SELECT TOP 10 *
+  FROM {table_name}
