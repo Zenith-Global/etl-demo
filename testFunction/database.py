@@ -27,25 +27,16 @@ def init_connections():
             quit()
         LOGGERS.get("console_logger").info(f"HOST: {db['HOST']}")
 
-        if db.get("DRIVER") is None:
-            LOGGERS.get("console_logger").error(f"DRIVER is not defined")
-            quit()
-        LOGGERS.get("console_logger").info(f"DRIVER: {db['DRIVER']}")
 
         if db.get("SECRET_KEY") is None:
             LOGGERS.get("console_logger").error(f"SECRET_KEY is not defined")
             quit()
         LOGGERS.get("console_logger").info(f"SECRET_KEY: {db['SECRET_KEY']}")
 
-        if db.get("TRUSTED_CONNECTION") is None:
-            LOGGERS.get("console_logger").error(f"TRUSTED_CONNECTION is not defined")
-            quit()
-        LOGGERS.get("console_logger").info(f"Trust connection: {db['TRUSTED_CONNECTION']}")
 
         connection_string = (f"mssql+pyodbc://"
                             f"{db['USER']}:{db['SECRET_KEY']}@{db['HOST']}/{db['NAME']}"
-                            f"?driver={db['DRIVER']}"
-                            f"&TrustServerCertificate={db['TRUSTED_CONNECTION']}")
+                            f"?")
         
         optional_parameters = []
         options = db.get('OPTIONS', {})

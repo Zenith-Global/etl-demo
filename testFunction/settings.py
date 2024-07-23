@@ -53,8 +53,6 @@ for db_name, db_settings in db_configs.items():
         'SECRET_KEY': db_settings.get('SECRET_KEY', ''),
         'HOST': db_settings.get('HOST', ''),
         'PORT': db_settings.get('PORT', ''),
-        'DRIVER': db_settings.get('DRIVER', ''),
-        'TRUSTED_CONNECTION': db_settings.get('TRUSTED_CONNECTION', ''),  
     }
 
     options = db_settings.get('OPTIONS', {})
