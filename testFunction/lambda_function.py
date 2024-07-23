@@ -7,7 +7,7 @@ import pandas as pd
 
 def lambda_handler(event, context):
     engines = init_connections()
-    gaia_engine =  next((item["engine"] for item in engines if item['name'] == "gaia"), None)
+    gaia_engine =  next((item["engine"] for item in engines if item['name'] == "gaia_test"), None)
 
     with open(QUERIES_FOLDER/"main_queries.yaml", 'r') as f:
         queries = yaml.safe_load(f)
@@ -20,7 +20,7 @@ def lambda_handler(event, context):
         LOGGERS.get("console_logger").info(df_columns)
         file_name_export = "test.xlsx"
         df_columns.to_excel(RESOURCES_FOLDER/file_name_export)
-        
+
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')

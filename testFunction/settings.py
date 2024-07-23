@@ -1,14 +1,13 @@
-import pandas as pd
-import os
 import logging
 import yaml
-from dotenv import load_dotenv
-from sqlalchemy import create_engine, MetaData, Table, Column, String
-from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.sql import text
 from pathlib import Path
 
-load_dotenv()
+
+BASE_PATH = Path(__file__).resolve().parent
+QUERIES_FOLDER = BASE_PATH / "queries"
+RESOURCES_FOLDER = BASE_PATH / "resources"
+CONFIG_FILE = BASE_PATH/"config.yaml"
+
 
 file_logger = logging.getLogger('file_logger')
 console_logger = logging.getLogger('console_logger')
@@ -34,22 +33,24 @@ LOGGERS = {
     'console_logger': console_logger
 }
 
-DATABASES = {
-    'gaia': { 
-        'ENGINE': os.getenv("GAIA_DB_ENGINE", default=""),
-        'NAME': os.getenv("GAIA_DB_NAME", default=""),
-        'USER': os.getenv("GAIA_USER", default=""),
-        'SECRET_KEY': os.getenv("GAIA_SECRET_KEY", default=""),
-        'HOST': os.getenv("GAIA_HOST", default=""),
-        'PORT': os.getenv("GAIA_PORT", default=""),
-        'OPTIONS': {
-                'query_timeout': 10,
-            },
-        'Trusted_Connection':os.getenv("GAIA_DB_TRUSTED_CONNECTION", default=""),
-        'DRIVER': os.getenv("GAIA_DB_OPTIONS_DRIVER", default="")
-    }
-}
+with open(CONFIG_FILE, 'r') as file:
+    config = yaml.safe_load(file)
 
-BASE_PATH = Path(__file__).resolve().parent
-QUERIES_FOLDER = BASE_PATH / "queries"
-RESOURCES_FOLDER = BASE_PATH / "resources"
+db_configs = config.get('databases', {})
+
+DATABASES = {}
+
+for db_name, db_settings in db_configs.items():
+    DATABASES[db_name] = {
+        'ENGINE': db_settings.get('ENGINE', ''),
+        'NAME': db_settings.get('NAME', ''),
+        'USER': db_settings.get('USER', ''),
+        'SECRET_KEY': db_settings.get('SECRET_KEY', ''),
+        'HOST': db_settings.get('HOST', ''),
+        'PORT': db_settings.get('PORT', ''),
+        'DRIVER': db_settings.get('DRIVER', ''),
+        'TRUSTED_CONNECTION': db_settings.get('TRUSTED_CONNECTION', ''),
+        'OPTIONS': {
+            'TIMEOUT': db_settings.get('OPTIONS', {}).get('TIMEOUT', '')}
+    }
+
