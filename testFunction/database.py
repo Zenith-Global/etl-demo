@@ -59,7 +59,7 @@ class Database():
             self.engines.append({"name": each_db, "engine": new_engine})
 
     def perform_query(self, db_name, query_name, query_args, query_file_name=None):
-        """Executes the query query_name in the db called db_name, then executes next_function"""
+        """Executes the query query_name in the db called db_name, then returns the result as a pandas df"""
     
         engine =  next((item["engine"] for item in self.engines if item['name'] == db_name), None)
 
@@ -75,8 +75,6 @@ class Database():
         df_columns = pd.read_sql(query, engine)
 
 
-        # Task successive to the query
-        print(df_columns)
-        # file_name_export = "test.xlsx"
-        # df_columns.to_excel(RESOURCES_FOLDER/file_name_export)
+        return(df_columns)
+
 
