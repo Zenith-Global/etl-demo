@@ -1,0 +1,15 @@
+databases:
+  <your-db-name-!required>:
+    ENGINE: <your-db-engine-!required>
+    NAME: <your-db-name-!required>
+    USER: <your-db-user-!required>
+    SECRET_KEY: <your-db-secret-key-!required>
+    HOST: <your-db-host-!required>
+    PORT: <your-db-port-!required>
+    OPTIONS:
+      <your-db-options>
+      connect_timeout: 10
+      TrustServerCertificate: "yes"
+      driver: "ODBC Driver 11 for SQL Server"
+      # Add as many optional parameters
+      
