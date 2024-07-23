@@ -35,12 +35,12 @@ def init_connections():
 
 
         connection_string = (f"mssql+pyodbc://"
-                            f"{db['USER']}:{db['SECRET_KEY']}@{db['HOST']}/{db['NAME']}"
-                            f"?")
+                            f"{db['USER']}:{db['SECRET_KEY']}@{db['HOST']}/{db['NAME']}")
         
         optional_parameters = []
         options = db.get('OPTIONS', {})
         if options is not None:
+            connection_string += "?"
             LOGGERS.get("console_logger").info(f"Optional parameters are present, adding them to the connection string...")
             for key, value in options.items():
                 LOGGERS.get("console_logger").info(f"Adding '{key}' parameter to the connection string")
