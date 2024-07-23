@@ -58,7 +58,7 @@ class Database():
 
             self.engines.append({"name": each_db, "engine": new_engine})
 
-    def perform_query(self, db_name, query_name, query_file_name=None):
+    def perform_query(self, db_name, query_name, query_args, query_file_name=None):
         """Executes the query query_name in the db called db_name, then executes next_function"""
     
         engine =  next((item["engine"] for item in self.engines if item['name'] == db_name), None)
@@ -71,9 +71,12 @@ class Database():
         with open(query_file_path, 'r') as f:
             queries = yaml.safe_load(f)
         
-        query = queries[query_name].format(table_name="dizCodiceIVA")
+        query = queries[query_name].format(**query_args)
         df_columns = pd.read_sql(query, engine)
 
-        file_name_export = "test.xlsx"
-        df_columns.to_excel(RESOURCES_FOLDER/file_name_export)
+
+        # Task successive to the query
+        print(df_columns)
+        # file_name_export = "test.xlsx"
+        # df_columns.to_excel(RESOURCES_FOLDER/file_name_export)
 
