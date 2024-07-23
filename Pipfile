@@ -9,6 +9,7 @@ pyyaml = "*"
 python-dotenv = "*"
 sqlalchemy = "*"
 pyodbc = "*"
+openpyxl = "*"
 
 [dev-packages]
 

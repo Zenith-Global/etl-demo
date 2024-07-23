@@ -1,5 +1,5 @@
 import json
-from settings import DATABASES, LOGGERS, QUERIES_FOLDER
+from settings import DATABASES, LOGGERS, QUERIES_FOLDER, RESOURCES_FOLDER
 import yaml 
 from database import init_connections
 from sqlalchemy.sql import text
@@ -18,7 +18,9 @@ def lambda_handler(event, context):
         fields = [row for row in result]
         df_columns = pd.read_sql(query, gaia_engine)
         LOGGERS.get("console_logger").info(df_columns)
-    
+        file_name_export = "test.xlsx"
+        df_columns.to_excel(RESOURCES_FOLDER/file_name_export)
+        
     return {
         'statusCode': 200,
         'body': json.dumps('Hello from Lambda!')

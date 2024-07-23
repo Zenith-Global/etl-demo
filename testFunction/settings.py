@@ -52,5 +52,4 @@ DATABASES = {
 
 BASE_PATH = Path(__file__).resolve().parent
 QUERIES_FOLDER = BASE_PATH / "queries"
-print(QUERIES_FOLDER)
-
+RESOURCES_FOLDER = BASE_PATH / "resources"
